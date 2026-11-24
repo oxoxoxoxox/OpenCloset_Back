@@ -1,6 +1,7 @@
 package DevFlow.OpenCloset_Back.Login;
 
 import DevFlow.OpenCloset_Back.Login.Dto.req.KakaoSignupRequestDto;
+import DevFlow.OpenCloset_Back.Login.Dto.res.KakaoUserInfoDto;
 import DevFlow.OpenCloset_Back.Login.Kakao.service.KakaoService;
 import DevFlow.OpenCloset_Back.Login.RefreshToken.RefreshTokenService;
 import DevFlow.OpenCloset_Back.User.User_Repository.UserRepository;
@@ -90,7 +91,7 @@ class KakaoSignupTest {
 
     @Test
     void callbackReportsWhetherSignupIsRequired() {
-        var info = new DevFlow.OpenCloset_Back.Login.Dto.res.KakaoUserInfoDto();
+        var info = new KakaoUserInfoDto();
         info.setId(123L);
         when(repository.findByKakaoId("123")).thenReturn(Optional.of(user));
         assertTrue(service.loginOrRegister(info).isSignupRequired());
@@ -100,13 +101,36 @@ class KakaoSignupTest {
 
     @Test
     void callbackDoesNotAutomaticallyLinkAnExistingEmail() {
-        var info = new DevFlow.OpenCloset_Back.Login.Dto.res.KakaoUserInfoDto();
+        var info = new KakaoUserInfoDto();
         info.setId(456L);
-        var account = new DevFlow.OpenCloset_Back.Login.Dto.res.KakaoUserInfoDto.KakaoAccount();
+        var account = new KakaoUserInfoDto.KakaoAccount();
         account.setEmail(user.getEmail());
         info.setKakao_account(account);
         assertThrows(IllegalArgumentException.class, () -> service.loginOrRegister(info));
         verify(repository, never()).save(any());
+    }
+
+    @Test
+    void linkingRestoresKakaoLoginForAnExistingMember() {
+        var info = new KakaoUserInfoDto();
+        info.setId(123L);
+        user.setKakaoId(null);
+        user.setPassword(encoder.encode(request.getPassword()));
+        when(repository.findByEmailForUpdate(user.getEmail())).thenReturn(Optional.of(user));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> service.linkExistingAccount(user.getEmail(), "wrong-password", info));
+        assertNull(user.getKakaoId());
+        verify(repository, never()).save(any());
+
+        service.linkExistingAccount(user.getEmail(), request.getPassword(), info);
+        assertEquals("123", user.getKakaoId());
+        verify(repository).save(user);
+
+        when(repository.findByKakaoId("123")).thenReturn(Optional.of(user));
+        var response = service.loginOrRegister(info);
+        assertEquals(user.getEmail(), response.getEmail());
+        assertFalse(response.isSignupRequired());
     }
 
 }

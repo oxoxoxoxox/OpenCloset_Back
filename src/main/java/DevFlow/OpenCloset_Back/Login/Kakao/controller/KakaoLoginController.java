@@ -73,6 +73,26 @@ public class KakaoLoginController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @Operation(summary = "기존 회원의 카카오 계정 연결",
+            description = "기존 계정 JWT와 비밀번호, 카카오에서 새로 받은 미사용 인가 코드로 계정을 연결합니다.")
+    @SecurityRequirement(name = "JWT")
+    @ApiResponse(responseCode = "204", description = "카카오 계정 연결 완료")
+    @PostMapping("/link")
+    public ResponseEntity<Void> linkExistingAccount(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody KakaoLinkRequest request) {
+        if (request.code() == null || request.code().isBlank()
+                || request.password() == null || request.password().isBlank()) {
+            throw new IllegalArgumentException("카카오 인가 코드와 기존 계정 비밀번호가 필요합니다.");
+        }
+        String accessToken = kakaoService.getAccessToken(request.code());
+        kakaoService.linkExistingAccount(userDetails.getUsername(), request.password(), kakaoService.getUserInfo(accessToken));
+        return ResponseEntity.noContent().build();
+    }
+
+    public record KakaoLinkRequest(String code, String password) {
+    }
+
     @Operation(summary = "카카오 회원가입 추가 정보 등록", description = "콜백에서 signupRequired가 true인 카카오 회원의 닉네임·주소·비밀번호를 한 번 등록합니다. "
             + "Swagger Authorize에 콜백에서 받은 accessToken을 입력하세요. 완료 후 기존 accessToken과 refreshToken을 계속 사용하며 다음 카카오 로그인부터 signupRequired는 false입니다. "
             + "닉네임 확인은 GET /auth/check_nickname을 사용합니다. 최종 저장에서도 중복을 검사하며 본인 닉네임은 허용합니다. "

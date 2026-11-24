@@ -99,7 +99,7 @@ public class KakaoService {
         User curUser = userRepository.findByKakaoId(kakaoId).orElse(null);
         if (curUser == null) {
             if (userRepository.findByEmail(email).isPresent()) {
-                throw new IllegalArgumentException("이미 등록된 이메일입니다. 기존 계정으로 로그인해주세요.");
+                throw new IllegalArgumentException("이미 등록된 이메일입니다. 기존 계정으로 로그인한 뒤 카카오 계정을 연결해주세요.");
             }
             curUser = new User();
             curUser.setEmail(email);
@@ -137,6 +137,31 @@ public class KakaoService {
                 curUser.getProfileImage());
         response.setSignupRequired(!Boolean.TRUE.equals(curUser.getKakaoSignupCompleted()));
         return response;
+    }
+
+    @Transactional
+    public void linkExistingAccount(String email, String password, KakaoUserInfoDto kakaoUserInfo) {
+        if (kakaoUserInfo == null || kakaoUserInfo.getId() == null) {
+            throw new IllegalArgumentException("카카오 사용자 ID가 필요합니다.");
+        }
+
+        User user = userRepository.findByEmailForUpdate(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        if (password == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("기존 계정 비밀번호를 확인해주세요.");
+        }
+
+        String kakaoId = String.valueOf(kakaoUserInfo.getId());
+        if (kakaoId.equals(user.getKakaoId())) {
+            return;
+        }
+        if (user.getKakaoId() != null || userRepository.findByKakaoId(kakaoId).isPresent()) {
+            throw new IllegalArgumentException("이미 연결된 카카오 계정입니다.");
+        }
+
+        user.setKakaoId(kakaoId);
+        user.setKakaoSignupCompleted(true);
+        userRepository.save(user);
     }
 
     @Transactional
