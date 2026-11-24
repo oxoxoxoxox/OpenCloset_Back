@@ -17,6 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 
+import org.springframework.mock.web.MockMultipartFile;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -71,6 +76,46 @@ class ChatServiceTest {
         }
         when(access.requireParticipant(7L, "outsider@example.test")).thenThrow(new AccessDeniedException("forbidden"));
         assertThatThrownBy(() -> service.sendMessage(7L, "outsider@example.test", "hello"))
+                .isInstanceOf(AccessDeniedException.class);
+        verifyNoInteractions(messages, events);
+    }
+
+    @Test
+    void imageIsSavedAndPublishedThroughTheSameMessageFlow() throws Exception {
+        User seller = user(1L, "seller@example.test");
+        User wearer = user(2L, "wearer@example.test");
+        ChatRoom room = new ChatRoom(7L, new Board(), seller, wearer, LocalDateTime.now());
+        when(access.requireParticipant(7L, wearer.getEmail())).thenReturn(room);
+        when(messages.save(any())).thenAnswer(invocation -> {
+            ChatMessage message = invocation.getArgument(0);
+            message.setId(10L);
+            assertThat(message.getImage().getContentType()).isEqualTo("image/png");
+            return message;
+        });
+        var bytes = new ByteArrayOutputStream();
+        ImageIO.write(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), "png", bytes);
+
+        var response = service.sendImage(7L, wearer.getEmail(),
+                new MockMultipartFile("image", "photo.png", "image/png", bytes.toByteArray()));
+
+        assertThat(response.getType()).isEqualTo("IMAGE");
+        assertThat(response.getImageUrl()).isEqualTo("/chat/room/7/messages/10/image");
+        verify(events).publishEvent(new ChatMessageSentEvent(7L, response));
+    }
+
+    @Test
+    void forgedImageAndOutsiderDownloadAreRejectedBeforeDatabaseAccess() {
+        User seller = user(1L, "seller@example.test");
+        User wearer = user(2L, "wearer@example.test");
+        when(access.requireParticipant(7L, wearer.getEmail()))
+                .thenReturn(new ChatRoom(7L, new Board(), seller, wearer, LocalDateTime.now()));
+        when(access.requireParticipant(7L, "outsider@example.test"))
+                .thenThrow(new AccessDeniedException("forbidden"));
+        var forged = new MockMultipartFile("image", "photo.png", "image/png", new byte[]{1, 2, 3});
+
+        assertThatThrownBy(() -> service.sendImage(7L, wearer.getEmail(), forged))
+                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> service.getImage(7L, 10L, "outsider@example.test"))
                 .isInstanceOf(AccessDeniedException.class);
         verifyNoInteractions(messages, events);
     }

@@ -1,5 +1,6 @@
 package DevFlow.OpenCloset_Back.Chat.ChatMessage.Repository;
 
+import DevFlow.OpenCloset_Back.Chat.ChatMessage.Entity.ChatImage;
 import DevFlow.OpenCloset_Back.Chat.ChatMessage.Entity.ChatMessage;
 import DevFlow.OpenCloset_Back.Chat.ChatRoom.Entity.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
+    @Query("select i from ChatMessage m join m.image i where m.id = :messageId and m.chatRoom.id = :roomId")
+    Optional<ChatImage> findImage(@Param("roomId") Long roomId, @Param("messageId") Long messageId);
+
     // 회원 탈퇴 시 채팅 메시지 일괄 삭제
     void deleteByChatRoomIn(List<ChatRoom> chatRooms);
 

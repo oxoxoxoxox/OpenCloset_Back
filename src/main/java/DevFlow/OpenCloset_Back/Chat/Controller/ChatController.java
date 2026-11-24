@@ -18,9 +18,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,7 +47,8 @@ public class ChatController {
     private static final String MESSAGE_EXAMPLE = """
             {"messageId":10,"senderId":7,"senderNickname":"김철수",
              "senderProfileImage":"https://opencloset.jihongeek.com/images/default_profile.png",
-             "message":"이 옷 사이즈 어떻게 되나요?","isRead":false,"sentAt":"2026-11-11T10:01:00"}
+             "message":"이 옷 사이즈 어떻게 되나요?","isRead":false,"sentAt":"2026-11-11T10:01:00",
+             "type":"TEXT","imageUrl":null}
             """;
     private static final String UNAUTHORIZED_EXAMPLE = "Unauthorized: Full authentication is required to access this resource";
     private static final String FORBIDDEN_EXAMPLE = "Access Denied: 본인이 참여한 채팅방만 접근할 수 있습니다.";
@@ -147,6 +153,39 @@ public class ChatController {
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByEmail(userDetails.getUsername());
         return chatService.getMessages(roomId, user);
+    }
+
+    @Operation(summary = "채팅방 이미지 전송",
+            description = "참여한 방에 JPEG 또는 PNG 이미지 한 장을 전송합니다. 최대 2MB, 1200만 픽셀입니다. "
+                    + "저장된 IMAGE 메시지는 대화 내역과 /topic/chat/{roomId}에서 확인할 수 있습니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "이미지 메시지 저장 성공"),
+            @ApiResponse(responseCode = "400", description = "이미지 누락 또는 지원하지 않는 이미지"),
+            @ApiResponse(responseCode = "401", description = "JWT 누락 또는 오류"),
+            @ApiResponse(responseCode = "403", description = "채팅방 참여자가 아님"),
+            @ApiResponse(responseCode = "404", description = "채팅방 없음"),
+            @ApiResponse(responseCode = "413", description = "이미지 크기 초과")
+    })
+    @PostMapping(value = "/room/{roomId}/messages/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ChatMessageResponseDto sendImage(
+            @PathVariable Long roomId,
+            @RequestPart("image") MultipartFile image,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
+        return chatService.sendImage(roomId, userDetails.getUsername(), image);
+    }
+
+    @Operation(summary = "채팅 메시지 이미지 조회",
+            description = "이미지 메시지의 imageUrl을 JWT와 함께 호출합니다. 방 참여자만 이미지 원본을 받을 수 있습니다.")
+    @GetMapping("/room/{roomId}/messages/{messageId}/image")
+    public ResponseEntity<byte[]> getImage(
+            @PathVariable Long roomId, @PathVariable Long messageId,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
+        var image = chatService.getImage(roomId, messageId, userDetails.getUsername());
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(image.getContentType()))
+                .cacheControl(CacheControl.noStore())
+                .body(image.getContent());
     }
 
     @Operation(summary = "메시지 읽음 처리 (로직 구현됨 ✅)",

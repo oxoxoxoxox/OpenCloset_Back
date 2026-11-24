@@ -32,4 +32,11 @@ public class ChatMessageResponseDto {
 
     @Schema(description = "전송 시각 (시간대 오프셋 없는 서버 LocalDateTime)", example = "2026-11-11T10:01:00")
     private LocalDateTime sentAt;
+
+    @Schema(description = "메시지 유형", allowableValues = {"TEXT", "IMAGE"}, example = "TEXT")
+    private String type;
+
+    @Schema(description = "이미지 조회 경로. JWT가 필요하며 텍스트 메시지는 null입니다.",
+            example = "/chat/room/1/messages/10/image", nullable = true)
+    private String imageUrl;
 }

@@ -29,6 +29,10 @@ public class ChatMessage {
     @Column(nullable = false, length = 1000)
     private String message;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", unique = true)
+    private ChatImage image;
+
     // 읽음 여부 (기본값: false)
     @Column(nullable = false)
     private Boolean isRead = false;

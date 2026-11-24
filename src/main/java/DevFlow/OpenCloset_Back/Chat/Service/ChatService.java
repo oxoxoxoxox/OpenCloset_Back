@@ -3,6 +3,7 @@ package DevFlow.OpenCloset_Back.Chat.Service;
 import DevFlow.OpenCloset_Back.Board.Repository.BoardRepository;
 import DevFlow.OpenCloset_Back.Board.entity.Board;
 import DevFlow.OpenCloset_Back.Chat.ChatMessage.Entity.ChatMessage;
+import DevFlow.OpenCloset_Back.Chat.ChatMessage.Entity.ChatImage;
 import DevFlow.OpenCloset_Back.Chat.ChatMessage.Repository.ChatMessageRepository;
 import DevFlow.OpenCloset_Back.Chat.ChatRoom.Entity.ChatRoom;
 import DevFlow.OpenCloset_Back.Chat.ChatRoom.Repository.ChatRoomRepository;
@@ -15,9 +16,16 @@ import DevFlow.OpenCloset_Back.User.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.MemoryCacheImageInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +33,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
+
+    private static final int MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+    private static final long MAX_IMAGE_PIXELS = 12_000_000;
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
@@ -171,13 +182,68 @@ public class ChatService {
             throw new IllegalArgumentException("메시지는 공백이 아닌 1~1000자여야 합니다.");
         }
         ChatRoom room = chatAccessService.requireParticipant(roomId, senderEmail);
+        return saveMessage(room, senderEmail, message, null);
+    }
+
+    @Transactional
+    public ChatMessageResponseDto sendImage(Long roomId, String senderEmail, MultipartFile file) {
+        ChatRoom room = chatAccessService.requireParticipant(roomId, senderEmail);
+        return saveMessage(room, senderEmail, "사진", readImage(file));
+    }
+
+    @Transactional(readOnly = true)
+    public ChatImage getImage(Long roomId, Long messageId, String email) {
+        chatAccessService.requireParticipant(roomId, email);
+        return chatMessageRepository.findImage(roomId, messageId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "채팅 이미지를 찾을 수 없습니다."));
+    }
+
+    private static ChatImage readImage(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일을 선택해주세요.");
+        }
+        if (file.getSize() > MAX_IMAGE_BYTES) {
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "이미지는 2MB 이하여야 합니다.");
+        }
+
+        try {
+            byte[] content = file.getBytes();
+            try (var input = new MemoryCacheImageInputStream(new ByteArrayInputStream(content))) {
+                var readers = ImageIO.getImageReaders(input);
+                if (!readers.hasNext()) {
+                    throw new IllegalArgumentException("JPEG 또는 PNG 이미지만 보낼 수 있습니다.");
+                }
+                var reader = readers.next();
+                try {
+                    String contentType = switch (reader.getFormatName()) {
+                        case "JPEG" -> "image/jpeg";
+                        case "png" -> "image/png";
+                        default -> throw new IllegalArgumentException("JPEG 또는 PNG 이미지만 보낼 수 있습니다.");
+                    };
+                    reader.setInput(input, true, true);
+                    if ((long) reader.getWidth(0) * reader.getHeight(0) > MAX_IMAGE_PIXELS) {
+                        throw new IllegalArgumentException("이미지는 1200만 픽셀 이하여야 합니다.");
+                    }
+                    reader.read(0);
+                    return new ChatImage(contentType, content);
+                } finally {
+                    reader.dispose();
+                }
+            }
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("이미지 파일을 읽을 수 없습니다.", ex);
+        }
+    }
+
+    private ChatMessageResponseDto saveMessage(ChatRoom room, String senderEmail, String message, ChatImage image) {
         User sender = room.getSeller().getEmail().equals(senderEmail) ? room.getSeller() : room.getWearer();
 
         ChatMessage chatMessage = new ChatMessage(room, sender, message);
+        chatMessage.setImage(image);
         chatMessageRepository.save(chatMessage);
         ChatMessageResponseDto responseDto = toMessageResponseDto(chatMessage);
-        eventPublisher.publishEvent(new ChatMessageSentEvent(roomId, responseDto));
-        log.debug("채팅 메시지 저장 - roomId: {}, messageId: {}", roomId, responseDto.getMessageId());
+        eventPublisher.publishEvent(new ChatMessageSentEvent(room.getId(), responseDto));
+        log.debug("채팅 메시지 저장 - roomId: {}, messageId: {}", room.getId(), responseDto.getMessageId());
 
         return responseDto;
     }
@@ -219,6 +285,7 @@ public class ChatService {
     }
 
     private ChatMessageResponseDto toMessageResponseDto(ChatMessage msg) {
+        boolean hasImage = msg.getImage() != null;
         return new ChatMessageResponseDto(
                 msg.getId(),
                 msg.getSender().getId(),
@@ -226,7 +293,9 @@ public class ChatService {
                 msg.getSender().getProfileImage(),
                 msg.getMessage(),
                 msg.getIsRead(),
-                msg.getSentAt()
+                msg.getSentAt(),
+                hasImage ? "IMAGE" : "TEXT",
+                hasImage ? "/chat/room/" + msg.getChatRoom().getId() + "/messages/" + msg.getId() + "/image" : null
         );
     }
 }
