@@ -1,0 +1,387 @@
+{
+  "stage" : "after",
+  "measuredAtUtc" : "2026-11-11T06:51:18.598121600Z",
+  "commit" : "f0b446ee93b2c41f9e8f0175d21e9ae00a197b9f",
+  "sourceKind" : "current working tree",
+  "measurementHarnessWorkingTreeStatus" : " M src/main/java/DevFlow/OpenCloset_Back/Board/Controller/BoardController.java\n M src/main/java/DevFlow/OpenCloset_Back/Board/Repository/BoardRepository.java\n M src/main/java/DevFlow/OpenCloset_Back/Board/Service/BoardService.java\n M src/main/java/DevFlow/OpenCloset_Back/Wishlist/Repository/WishlistRepository.java\n?? docs/\n?? scripts/\n?? src/main/java/DevFlow/OpenCloset_Back/Board/Repository/BoardListRepository.java\n?? src/main/java/DevFlow/OpenCloset_Back/Board/Service/BoardListCursor.java\n?? src/main/java/DevFlow/OpenCloset_Back/Board/dto/res/BoardCursorResponseDto.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardListBenchmarkTest.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardListCursorTest.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardListTestData.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardPaginationIntegrationTest.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardPaginationTestDatabase.java\n?? src/test/resources/application-board-pagination-test.properties\n",
+  "sourceSha256" : {
+    "Board/Controller/BoardController.java" : "3a3ca88f97d34f5d54ca76be303d246474910343d5fcd6ace99d9fd2c8885e8c",
+    "Board/Service/BoardService.java" : "c7dc0c8d87905d0b688a25c492549991aa30eee1074a366fa5e26785ad0b2a4c",
+    "Board/Repository/BoardRepository.java" : "f643f84aca17227ec4a6cf076841b4d669437cbf374ff3b6f5b6e87b32bf3ed5",
+    "Board/dto/res/BoardCreateResponsetDto.java" : "2f71f0ffb2f13241c8a5297a708ffe6b80746251acd20bcda82de156598137b1"
+  },
+  "java" : "17.0.21+9",
+  "os" : "Windows 11 amd64",
+  "database" : "10.11.19-MariaDB-ubu2204",
+  "springBoot" : "3.4.4",
+  "hibernate" : "6.6.11.Final",
+  "endpoint" : "GET /board/All?size=20",
+  "authentication" : "valid local-fixture JWT; seller profile address pagination-town-main",
+  "warmupRequestsPerScale" : 5,
+  "measuredRequestsPerScale" : 30,
+  "concurrency" : 1,
+  "timing" : "System.nanoTime around HTTP exchange through complete response body; parsing excluded",
+  "percentile" : "nearest rank: sorted[ceil(p*n)-1]",
+  "sqlCounting" : "Hibernate Statistics.prepareStatementCount reset before each sequential HTTP request; includes JWT/DTO/wishlist queries",
+  "measurements" : [ {
+    "totalBoards" : 1000,
+    "matchingBoards" : 800,
+    "users" : 122,
+    "imagesPerBoard" : 2,
+    "wishlistRows" : 100,
+    "returnedItems" : 20,
+    "p50Ms" : 22.1575,
+    "p95Ms" : 27.041,
+    "sqlPerRequestMin" : 5,
+    "sqlPerRequestMax" : 5,
+    "responseBytesMin" : 16442,
+    "responseBytesMax" : 16442,
+    "responseHeaders" : "JSON bytes only; HTTP headers excluded; Accept-Encoding: identity",
+    "timesMs" : [ 29.6451, 27.041, 25.4992, 23.9077, 23.7077, 23.6876, 23.2727, 26.6734, 25.1072, 23.7131, 24.2591, 23.5561, 22.9968, 24.6652, 22.0678, 21.2971, 21.8893, 20.4181, 22.1575, 25.6509, 21.6092, 19.648, 18.6245, 19.5987, 18.909, 17.8112, 19.5898, 16.3334, 20.5119, 18.8073 ],
+    "sqlCounts" : [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ],
+    "responseBytes" : [ 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442, 16442 ],
+    "sampleSql" : [ {
+      "sql" : "select u1_0.id,u1_0.address,u1_0.email,u1_0.nickname,u1_0.password,u1_0.profile_image from users u1_0 where u1_0.email=?",
+      "executions" : 2
+    }, {
+      "sql" : "select b1_0.id,b2_0.id,b2_0.address,b2_0.email,b2_0.nickname,b2_0.password,b2_0.profile_image,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,s1_0.id,s1_0.address,s1_0.email,s1_0.nickname,s1_0.password,s1_0.profile_image,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 join users s1_0 on s1_0.id=b1_0.seller_id left join users b2_0 on b2_0.id=b1_0.buyer_id where s1_0.address=? order by b1_0.modified_at desc,b1_0.id desc limit ?",
+      "executions" : 1
+    }, {
+      "sql" : "select distinct b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,i1_0.board_id,i1_0.image_path,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join board_images i1_0 on b1_0.id=i1_0.board_id where b1_0.id in (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "executions" : 1
+    }, {
+      "sql" : "select w1_0.board_id from wishlist w1_0 where w1_0.user_id=? and w1_0.board_id in (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "executions" : 1
+    } ],
+    "indexes" : [ {
+      "Table" : "board",
+      "Non_unique" : 0,
+      "Key_name" : "PRIMARY",
+      "Seq_in_index" : 1,
+      "Column_name" : "id",
+      "Collation" : "A",
+      "Cardinality" : 973,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FK5va3aeqv2qa9qrne13lbibrx9",
+      "Seq_in_index" : 1,
+      "Column_name" : "buyer_id",
+      "Collation" : "A",
+      "Cardinality" : 10,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "YES",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FKmubnkce7olqoiuljless2l3ik",
+      "Seq_in_index" : 1,
+      "Column_name" : "seller_id",
+      "Collation" : "A",
+      "Cardinality" : 243,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    } ],
+    "windowPlan" : {
+      "sql" : "select b1_0.id,b2_0.id,b2_0.address,b2_0.email,b2_0.nickname,b2_0.password,b2_0.profile_image,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,s1_0.id,s1_0.address,s1_0.email,s1_0.nickname,s1_0.password,s1_0.profile_image,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 join users s1_0 on s1_0.id=b1_0.seller_id left join users b2_0 on b2_0.id=b1_0.buyer_id where s1_0.address=? order by b1_0.modified_at desc,b1_0.id desc limit ?",
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "s1_0",
+        "type" : "ALL",
+        "possible_keys" : "PRIMARY",
+        "key" : null,
+        "key_len" : null,
+        "ref" : null,
+        "rows" : "122",
+        "Extra" : "Using where; Using temporary; Using filesort"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "ref",
+        "possible_keys" : "FKmubnkce7olqoiuljless2l3ik",
+        "key" : "FKmubnkce7olqoiuljless2l3ik",
+        "key_len" : "8",
+        "ref" : "OpenCloset.s1_0.id",
+        "rows" : "4",
+        "Extra" : ""
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b2_0",
+        "type" : "eq_ref",
+        "possible_keys" : "PRIMARY",
+        "key" : "PRIMARY",
+        "key_len" : "8",
+        "ref" : "OpenCloset.b1_0.buyer_id",
+        "rows" : "1",
+        "Extra" : "Using where"
+      } ],
+      "parameters" : [ "pagination-town-main", 21 ]
+    },
+    "imagePlan" : {
+      "sql" : "select distinct b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,i1_0.board_id,i1_0.image_path,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join board_images i1_0 on b1_0.id=i1_0.board_id where b1_0.id in (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "range",
+        "possible_keys" : "PRIMARY",
+        "key" : "PRIMARY",
+        "key_len" : "8",
+        "ref" : null,
+        "rows" : "20",
+        "Extra" : "Using where; Using temporary"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "i1_0",
+        "type" : "ref",
+        "possible_keys" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key_len" : "8",
+        "ref" : "OpenCloset.b1_0.id",
+        "rows" : "1",
+        "Extra" : ""
+      } ],
+      "parameters" : [ 980, 979, 978, 977, 976, 975, 974, 973, 972, 971, 970, 969, 968, 967, 966, 965, 964, 963, 962, 961 ]
+    },
+    "nextWindowSqlCount" : 5,
+    "nextWindowPlan" : {
+      "sql" : "select b1_0.id,b2_0.id,b2_0.address,b2_0.email,b2_0.nickname,b2_0.password,b2_0.profile_image,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,s1_0.id,s1_0.address,s1_0.email,s1_0.nickname,s1_0.password,s1_0.profile_image,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 join users s1_0 on s1_0.id=b1_0.seller_id left join users b2_0 on b2_0.id=b1_0.buyer_id where s1_0.address=? and (b1_0.modified_at<? or (b1_0.modified_at=? and b1_0.id<?) or b1_0.modified_at is null) order by b1_0.modified_at desc,b1_0.id desc limit ?",
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "s1_0",
+        "type" : "ALL",
+        "possible_keys" : "PRIMARY",
+        "key" : null,
+        "key_len" : null,
+        "ref" : null,
+        "rows" : "122",
+        "Extra" : "Using where; Using temporary; Using filesort"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "ref",
+        "possible_keys" : "PRIMARY,FKmubnkce7olqoiuljless2l3ik",
+        "key" : "FKmubnkce7olqoiuljless2l3ik",
+        "key_len" : "8",
+        "ref" : "OpenCloset.s1_0.id",
+        "rows" : "4",
+        "Extra" : "Using where"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b2_0",
+        "type" : "eq_ref",
+        "possible_keys" : "PRIMARY",
+        "key" : "PRIMARY",
+        "key_len" : "8",
+        "ref" : "OpenCloset.b1_0.buyer_id",
+        "rows" : "1",
+        "Extra" : "Using where"
+      } ],
+      "parameters" : [ "pagination-town-main", "2025-12-31T15:02:17.000+00:00", "2025-12-31T15:02:17.000+00:00", 961, 21 ]
+    }
+  }, {
+    "totalBoards" : 5000,
+    "matchingBoards" : 4000,
+    "users" : 122,
+    "imagesPerBoard" : 2,
+    "wishlistRows" : 500,
+    "returnedItems" : 20,
+    "p50Ms" : 23.3121,
+    "p95Ms" : 31.586,
+    "sqlPerRequestMin" : 5,
+    "sqlPerRequestMax" : 5,
+    "responseBytesMin" : 16523,
+    "responseBytesMax" : 16523,
+    "responseHeaders" : "JSON bytes only; HTTP headers excluded; Accept-Encoding: identity",
+    "timesMs" : [ 21.9147, 24.8391, 22.1848, 22.823, 23.3774, 25.5379, 23.627, 23.0776, 24.6615, 24.8277, 25.3768, 23.8671, 25.1687, 24.4604, 24.1339, 25.2267, 24.1965, 23.3121, 23.1604, 21.3622, 20.8026, 31.586, 32.4044, 21.542, 21.7359, 21.4029, 21.1891, 20.2759, 21.0369, 20.5283 ],
+    "sqlCounts" : [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ],
+    "responseBytes" : [ 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523, 16523 ],
+    "sampleSql" : [ {
+      "sql" : "select u1_0.id,u1_0.address,u1_0.email,u1_0.nickname,u1_0.password,u1_0.profile_image from users u1_0 where u1_0.email=?",
+      "executions" : 2
+    }, {
+      "sql" : "select b1_0.id,b2_0.id,b2_0.address,b2_0.email,b2_0.nickname,b2_0.password,b2_0.profile_image,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,s1_0.id,s1_0.address,s1_0.email,s1_0.nickname,s1_0.password,s1_0.profile_image,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 join users s1_0 on s1_0.id=b1_0.seller_id left join users b2_0 on b2_0.id=b1_0.buyer_id where s1_0.address=? order by b1_0.modified_at desc,b1_0.id desc limit ?",
+      "executions" : 1
+    }, {
+      "sql" : "select distinct b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,i1_0.board_id,i1_0.image_path,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join board_images i1_0 on b1_0.id=i1_0.board_id where b1_0.id in (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "executions" : 1
+    }, {
+      "sql" : "select w1_0.board_id from wishlist w1_0 where w1_0.user_id=? and w1_0.board_id in (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "executions" : 1
+    } ],
+    "indexes" : [ {
+      "Table" : "board",
+      "Non_unique" : 0,
+      "Key_name" : "PRIMARY",
+      "Seq_in_index" : 1,
+      "Column_name" : "id",
+      "Collation" : "A",
+      "Cardinality" : 4921,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FK5va3aeqv2qa9qrne13lbibrx9",
+      "Seq_in_index" : 1,
+      "Column_name" : "buyer_id",
+      "Collation" : "A",
+      "Cardinality" : 10,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "YES",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FKmubnkce7olqoiuljless2l3ik",
+      "Seq_in_index" : 1,
+      "Column_name" : "seller_id",
+      "Collation" : "A",
+      "Cardinality" : 205,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    } ],
+    "windowPlan" : {
+      "sql" : "select b1_0.id,b2_0.id,b2_0.address,b2_0.email,b2_0.nickname,b2_0.password,b2_0.profile_image,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,s1_0.id,s1_0.address,s1_0.email,s1_0.nickname,s1_0.password,s1_0.profile_image,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 join users s1_0 on s1_0.id=b1_0.seller_id left join users b2_0 on b2_0.id=b1_0.buyer_id where s1_0.address=? order by b1_0.modified_at desc,b1_0.id desc limit ?",
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "s1_0",
+        "type" : "ALL",
+        "possible_keys" : "PRIMARY",
+        "key" : null,
+        "key_len" : null,
+        "ref" : null,
+        "rows" : "122",
+        "Extra" : "Using where; Using temporary; Using filesort"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "ref",
+        "possible_keys" : "FKmubnkce7olqoiuljless2l3ik",
+        "key" : "FKmubnkce7olqoiuljless2l3ik",
+        "key_len" : "8",
+        "ref" : "OpenCloset.s1_0.id",
+        "rows" : "24",
+        "Extra" : ""
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b2_0",
+        "type" : "eq_ref",
+        "possible_keys" : "PRIMARY",
+        "key" : "PRIMARY",
+        "key_len" : "8",
+        "ref" : "OpenCloset.b1_0.buyer_id",
+        "rows" : "1",
+        "Extra" : "Using where"
+      } ],
+      "parameters" : [ "pagination-town-main", 21 ]
+    },
+    "imagePlan" : {
+      "sql" : "select distinct b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,i1_0.board_id,i1_0.image_path,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join board_images i1_0 on b1_0.id=i1_0.board_id where b1_0.id in (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "range",
+        "possible_keys" : "PRIMARY",
+        "key" : "PRIMARY",
+        "key_len" : "8",
+        "ref" : null,
+        "rows" : "20",
+        "Extra" : "Using where; Using temporary"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "i1_0",
+        "type" : "ref",
+        "possible_keys" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key_len" : "8",
+        "ref" : "OpenCloset.b1_0.id",
+        "rows" : "1",
+        "Extra" : ""
+      } ],
+      "parameters" : [ 4980, 4979, 4978, 4977, 4976, 4975, 4974, 4973, 4972, 4971, 4970, 4969, 4968, 4967, 4966, 4965, 4964, 4963, 4962, 4961 ]
+    },
+    "nextWindowSqlCount" : 5,
+    "nextWindowPlan" : {
+      "sql" : "select b1_0.id,b2_0.id,b2_0.address,b2_0.email,b2_0.nickname,b2_0.password,b2_0.profile_image,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,s1_0.id,s1_0.address,s1_0.email,s1_0.nickname,s1_0.password,s1_0.profile_image,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 join users s1_0 on s1_0.id=b1_0.seller_id left join users b2_0 on b2_0.id=b1_0.buyer_id where s1_0.address=? and (b1_0.modified_at<? or (b1_0.modified_at=? and b1_0.id<?) or b1_0.modified_at is null) order by b1_0.modified_at desc,b1_0.id desc limit ?",
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "s1_0",
+        "type" : "ALL",
+        "possible_keys" : "PRIMARY",
+        "key" : null,
+        "key_len" : null,
+        "ref" : null,
+        "rows" : "122",
+        "Extra" : "Using where; Using temporary; Using filesort"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "ref",
+        "possible_keys" : "PRIMARY,FKmubnkce7olqoiuljless2l3ik",
+        "key" : "FKmubnkce7olqoiuljless2l3ik",
+        "key_len" : "8",
+        "ref" : "OpenCloset.s1_0.id",
+        "rows" : "24",
+        "Extra" : "Using where"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b2_0",
+        "type" : "eq_ref",
+        "possible_keys" : "PRIMARY",
+        "key" : "PRIMARY",
+        "key_len" : "8",
+        "ref" : "OpenCloset.b1_0.buyer_id",
+        "rows" : "1",
+        "Extra" : "Using where"
+      } ],
+      "parameters" : [ "pagination-town-main", "2025-12-31T15:11:48.000+00:00", "2025-12-31T15:11:48.000+00:00", 4961, 21 ]
+    }
+  } ]
+}

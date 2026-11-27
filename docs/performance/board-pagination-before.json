@@ -1,0 +1,271 @@
+{
+  "stage" : "before",
+  "measuredAtUtc" : "2026-11-11T06:37:12.139104100Z",
+  "commit" : "f0b446ee93b2c41f9e8f0175d21e9ae00a197b9f",
+  "sourceKind" : "git archive plus the current measurement harness; src/main unchanged",
+  "measurementHarnessWorkingTreeStatus" : " M src/main/java/DevFlow/OpenCloset_Back/Board/Controller/BoardController.java\n M src/main/java/DevFlow/OpenCloset_Back/Board/Repository/BoardRepository.java\n M src/main/java/DevFlow/OpenCloset_Back/Board/Service/BoardService.java\n M src/main/java/DevFlow/OpenCloset_Back/Wishlist/Repository/WishlistRepository.java\n?? docs/\n?? scripts/\n?? src/main/java/DevFlow/OpenCloset_Back/Board/Repository/BoardListRepository.java\n?? src/main/java/DevFlow/OpenCloset_Back/Board/Service/BoardListCursor.java\n?? src/main/java/DevFlow/OpenCloset_Back/Board/dto/res/BoardCursorResponseDto.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardListBenchmarkTest.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardListCursorTest.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardListTestData.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardPaginationIntegrationTest.java\n?? src/test/java/DevFlow/OpenCloset_Back/Board/BoardPaginationTestDatabase.java\n?? src/test/resources/application-board-pagination-test.properties\n",
+  "sourceSha256" : {
+    "Board/Controller/BoardController.java" : "e0d2699ee9009afadb9c690ed12860c967baa9c4d803469553c66b909655e7a8",
+    "Board/Service/BoardService.java" : "575b7a0f9676e7f04ea01b95709c0b19abad1473d50157cd5851d4500790d4a8",
+    "Board/Repository/BoardRepository.java" : "cfb6173a7846a6c3faec3cac753abf3e506786db35e2581e3105000807c36164",
+    "Board/dto/res/BoardCreateResponsetDto.java" : "2f71f0ffb2f13241c8a5297a708ffe6b80746251acd20bcda82de156598137b1"
+  },
+  "java" : "17.0.21+9",
+  "os" : "Windows 11 amd64",
+  "database" : "10.11.19-MariaDB-ubu2204",
+  "springBoot" : "3.4.4",
+  "hibernate" : "6.6.11.Final",
+  "endpoint" : "GET /board/All?size=20",
+  "authentication" : "valid local-fixture JWT; seller profile address pagination-town-main",
+  "warmupRequestsPerScale" : 5,
+  "measuredRequestsPerScale" : 30,
+  "concurrency" : 1,
+  "timing" : "System.nanoTime around HTTP exchange through complete response body; parsing excluded",
+  "percentile" : "nearest rank: sorted[ceil(p*n)-1]",
+  "sqlCounting" : "Hibernate Statistics.prepareStatementCount reset before each sequential HTTP request; includes JWT/DTO/wishlist queries",
+  "measurements" : [ {
+    "totalBoards" : 1000,
+    "matchingBoards" : 800,
+    "users" : 122,
+    "imagesPerBoard" : 2,
+    "wishlistRows" : 100,
+    "returnedItems" : 800,
+    "p50Ms" : 455.927,
+    "p95Ms" : 633.4092,
+    "sqlPerRequestMin" : 888,
+    "sqlPerRequestMax" : 888,
+    "responseBytesMin" : 654095,
+    "responseBytesMax" : 654095,
+    "responseHeaders" : "JSON bytes only; HTTP headers excluded; Accept-Encoding: identity",
+    "timesMs" : [ 517.8525, 537.3906, 426.347, 416.2246, 397.0378, 459.0027, 392.3148, 463.6491, 474.4373, 424.6594, 455.8933, 469.3366, 435.0793, 427.1544, 438.5222, 407.3426, 419.1546, 360.6936, 481.3189, 557.4498, 522.6471, 634.9006, 633.4092, 617.1898, 507.9167, 611.0782, 617.4582, 455.927, 428.0445, 389.1712 ],
+    "sqlCounts" : [ 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888, 888 ],
+    "responseBytes" : [ 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095, 654095 ],
+    "sampleSql" : [ {
+      "executions" : 3,
+      "sql" : "select u1_0.id,u1_0.address,u1_0.email,u1_0.nickname,u1_0.password,u1_0.profile_image from users u1_0 where u1_0.email=?"
+    }, {
+      "executions" : 1,
+      "sql" : "select b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join users s1_0 on s1_0.id=b1_0.seller_id where s1_0.address=? order by b1_0.modified_at desc"
+    }, {
+      "executions" : 800,
+      "sql" : "select i1_0.board_id,i1_0.image_path from board_images i1_0 where i1_0.board_id=?"
+    }, {
+      "executions" : 83,
+      "sql" : "select u1_0.id,u1_0.address,u1_0.email,u1_0.nickname,u1_0.password,u1_0.profile_image from users u1_0 where u1_0.id=?"
+    }, {
+      "executions" : 1,
+      "sql" : "select w1_0.id,w1_0.board_id,w1_0.created_at,w1_0.user_id from wishlist w1_0 left join users u1_0 on u1_0.id=w1_0.user_id where u1_0.id=?"
+    } ],
+    "indexes" : [ {
+      "Table" : "board",
+      "Non_unique" : 0,
+      "Key_name" : "PRIMARY",
+      "Seq_in_index" : 1,
+      "Column_name" : "id",
+      "Collation" : "A",
+      "Cardinality" : 973,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FK5va3aeqv2qa9qrne13lbibrx9",
+      "Seq_in_index" : 1,
+      "Column_name" : "buyer_id",
+      "Collation" : "A",
+      "Cardinality" : 10,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "YES",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FKmubnkce7olqoiuljless2l3ik",
+      "Seq_in_index" : 1,
+      "Column_name" : "seller_id",
+      "Collation" : "A",
+      "Cardinality" : 243,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    } ],
+    "windowPlan" : {
+      "parameters" : [ "pagination-town-main" ],
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "s1_0",
+        "type" : "ALL",
+        "possible_keys" : "PRIMARY",
+        "key" : null,
+        "key_len" : null,
+        "ref" : null,
+        "rows" : "122",
+        "Extra" : "Using where; Using temporary; Using filesort"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "ref",
+        "possible_keys" : "FKmubnkce7olqoiuljless2l3ik",
+        "key" : "FKmubnkce7olqoiuljless2l3ik",
+        "key_len" : "8",
+        "ref" : "OpenCloset.s1_0.id",
+        "rows" : "4",
+        "Extra" : ""
+      } ],
+      "sql" : "select b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join users s1_0 on s1_0.id=b1_0.seller_id where s1_0.address=? order by b1_0.modified_at desc"
+    },
+    "imagePlan" : {
+      "parameters" : [ 980 ],
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "i1_0",
+        "type" : "ref",
+        "possible_keys" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key_len" : "8",
+        "ref" : "const",
+        "rows" : "2",
+        "Extra" : ""
+      } ],
+      "sql" : "select i1_0.board_id,i1_0.image_path from board_images i1_0 where i1_0.board_id=?"
+    }
+  }, {
+    "totalBoards" : 5000,
+    "matchingBoards" : 4000,
+    "users" : 122,
+    "imagesPerBoard" : 2,
+    "wishlistRows" : 500,
+    "returnedItems" : 4000,
+    "p50Ms" : 1670.3989,
+    "p95Ms" : 1784.6288,
+    "sqlPerRequestMin" : 4088,
+    "sqlPerRequestMax" : 4088,
+    "responseBytesMin" : 3284695,
+    "responseBytesMax" : 3284695,
+    "responseHeaders" : "JSON bytes only; HTTP headers excluded; Accept-Encoding: identity",
+    "timesMs" : [ 1713.7085, 1607.1049, 1635.4139, 1580.7956, 1678.9892, 1605.9708, 1670.3989, 1625.315, 1591.2482, 1544.5028, 1616.6826, 1545.5316, 1686.2044, 1685.3674, 1636.2406, 1688.2469, 1775.3909, 1826.2009, 1753.7822, 1769.153, 1666.0109, 1708.61, 1743.001, 1654.5445, 1696.9262, 1784.6288, 1711.6306, 1601.4871, 1659.4969, 1689.1575 ],
+    "sqlCounts" : [ 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088, 4088 ],
+    "responseBytes" : [ 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695, 3284695 ],
+    "sampleSql" : [ {
+      "executions" : 3,
+      "sql" : "select u1_0.id,u1_0.address,u1_0.email,u1_0.nickname,u1_0.password,u1_0.profile_image from users u1_0 where u1_0.email=?"
+    }, {
+      "executions" : 1,
+      "sql" : "select b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join users s1_0 on s1_0.id=b1_0.seller_id where s1_0.address=? order by b1_0.modified_at desc"
+    }, {
+      "executions" : 4000,
+      "sql" : "select i1_0.board_id,i1_0.image_path from board_images i1_0 where i1_0.board_id=?"
+    }, {
+      "executions" : 83,
+      "sql" : "select u1_0.id,u1_0.address,u1_0.email,u1_0.nickname,u1_0.password,u1_0.profile_image from users u1_0 where u1_0.id=?"
+    }, {
+      "executions" : 1,
+      "sql" : "select w1_0.id,w1_0.board_id,w1_0.created_at,w1_0.user_id from wishlist w1_0 left join users u1_0 on u1_0.id=w1_0.user_id where u1_0.id=?"
+    } ],
+    "indexes" : [ {
+      "Table" : "board",
+      "Non_unique" : 0,
+      "Key_name" : "PRIMARY",
+      "Seq_in_index" : 1,
+      "Column_name" : "id",
+      "Collation" : "A",
+      "Cardinality" : 4921,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FK5va3aeqv2qa9qrne13lbibrx9",
+      "Seq_in_index" : 1,
+      "Column_name" : "buyer_id",
+      "Collation" : "A",
+      "Cardinality" : 10,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "YES",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    }, {
+      "Table" : "board",
+      "Non_unique" : 1,
+      "Key_name" : "FKmubnkce7olqoiuljless2l3ik",
+      "Seq_in_index" : 1,
+      "Column_name" : "seller_id",
+      "Collation" : "A",
+      "Cardinality" : 205,
+      "Sub_part" : null,
+      "Packed" : null,
+      "Null" : "",
+      "Index_type" : "BTREE",
+      "Comment" : "",
+      "Index_comment" : "",
+      "Ignored" : "NO"
+    } ],
+    "windowPlan" : {
+      "parameters" : [ "pagination-town-main" ],
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "s1_0",
+        "type" : "ALL",
+        "possible_keys" : "PRIMARY",
+        "key" : null,
+        "key_len" : null,
+        "ref" : null,
+        "rows" : "122",
+        "Extra" : "Using where; Using temporary; Using filesort"
+      }, {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "b1_0",
+        "type" : "ref",
+        "possible_keys" : "FKmubnkce7olqoiuljless2l3ik",
+        "key" : "FKmubnkce7olqoiuljless2l3ik",
+        "key_len" : "8",
+        "ref" : "OpenCloset.s1_0.id",
+        "rows" : "24",
+        "Extra" : ""
+      } ],
+      "sql" : "select b1_0.id,b1_0.buyer_id,b1_0.category,b1_0.created_at,b1_0.description,b1_0.detail_address,b1_0.end_date,b1_0.latitude,b1_0.longitude,b1_0.modified_at,b1_0.price,b1_0.seller_id,b1_0.sex,b1_0.size,b1_0.start_date,b1_0.status,b1_0.title from board b1_0 left join users s1_0 on s1_0.id=b1_0.seller_id where s1_0.address=? order by b1_0.modified_at desc"
+    },
+    "imagePlan" : {
+      "parameters" : [ 4978 ],
+      "plan" : [ {
+        "id" : 1,
+        "select_type" : "SIMPLE",
+        "table" : "i1_0",
+        "type" : "ref",
+        "possible_keys" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key" : "FK3asxj1twpvyjxhcem6qqhmwhe",
+        "key_len" : "8",
+        "ref" : "const",
+        "rows" : "2",
+        "Extra" : ""
+      } ],
+      "sql" : "select i1_0.board_id,i1_0.image_path from board_images i1_0 where i1_0.board_id=?"
+    }
+  } ]
+}

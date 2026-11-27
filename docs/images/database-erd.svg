@@ -1,0 +1,361 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1346" height="941" viewBox="0 0 1346 941" role="img" aria-labelledby="title description">
+  <title id="title">Open Closet DB 설계도</title>
+  <desc id="description">회원, 상품, 이미지, 찜, 채팅, 인증 및 상품 카테고리 테이블의 컬럼과 외래 키 관계.</desc>
+  <style>
+    text { font-family: "Segoe UI", "Malgun Gothic", sans-serif; fill: #edf0f6; }
+    .table-name { font: bold 16px Consolas, monospace; }
+    .column, .type { font: 13px Consolas, monospace; }
+    .type { fill: #c1c8d4; }
+    .key { font: bold 11px Consolas, monospace; fill: #82dbff; }
+    .count { font: bold 11px Consolas, monospace; fill: #8dddff; paint-order: stroke; stroke: #3d414c; stroke-width: 3px; }
+    .links path { fill: none; stroke: #48b8ed; stroke-width: 1.6; }
+  </style>
+  <rect width="1346" height="941" fill="#3d414c"/>
+  <text x="32" y="39" font-size="23" font-weight="bold">Open Closet · DB 설계도</text>
+  <text x="32" y="61" font-size="13" fill="#ccd2dd">MariaDB · JPA 매핑 기준</text>
+  <text x="1062" y="90" font-size="13" font-weight="bold">상품 카테고리</text>
+  <g class="links">
+  <path d="M284 148L303 148Q311 148 311 156L311 164Q311 172 319 172L372 172"/>
+  <text class="count" x="289" y="144" text-anchor="start">1</text>
+  <text class="count" x="367" y="168" text-anchor="end">*</text>
+  <path d="M284 148L322 148Q330 148 330 156L330 188Q330 196 338 196L372 196"/>
+  <text class="count" x="335" y="188" text-anchor="start">0..1</text>
+  <text class="count" x="367" y="192" text-anchor="end">*</text>
+  <path d="M624 148L655 148Q663 148 663 156L663 164Q663 172 671 172L710 172"/>
+  <text class="count" x="629" y="144" text-anchor="start">1</text>
+  <text class="count" x="705" y="168" text-anchor="end">*</text>
+  <path d="M284 148L291.5 148Q299 148 299 140.5L299 86Q299 78 307 78L663 78Q671 78 671 86L671 188Q671 196 679 196L710 196"/>
+  <text class="count" x="705" y="192" text-anchor="end">*</text>
+  <path d="M284 148L291.5 148Q299 148 299 140.5L299 99Q299 91 307 91L678 91Q686 91 686 99L686 212Q686 220 694 220L710 220"/>
+  <text class="count" x="705" y="216" text-anchor="end">*</text>
+  <path d="M32 148L22 148Q14 148 14 156L14 507Q14 515 22 515L32 515"/>
+  <text class="count" x="27" y="144" text-anchor="end">1</text>
+  <text class="count" x="27" y="511" text-anchor="end">*</text>
+  <path d="M372 148L360 148Q352 148 352 156L352 531Q352 539 344 539L284 539"/>
+  <text class="count" x="367" y="144" text-anchor="end">1</text>
+  <text class="count" x="289" y="535" text-anchor="start">*</text>
+  <path d="M624 148L632 148Q640 148 640 156L640 644Q640 652 632 652L624 652"/>
+  <text class="count" x="629" y="648" text-anchor="start">*</text>
+  <path d="M962 148L969.5 148Q977 148 977 155.5L977 470.5Q977 478 969.5 478L962 478"/>
+  <text class="count" x="967" y="144" text-anchor="start">1</text>
+  <text class="count" x="967" y="474" text-anchor="start">*</text>
+  <path d="M284 148L289 148Q294 148 294 153L294 576Q294 584 302 584L675 584Q683 584 683 576L683 510Q683 502 691 502L710 502"/>
+  <text class="count" x="705" y="498" text-anchor="end">*</text>
+  <path d="M962 767L980 767Q988 767 988 759L988 534Q988 526 980 526L962 526"/>
+  <text class="count" x="967" y="763" text-anchor="start">0..1</text>
+  <text class="count" x="967" y="522" text-anchor="start">0..1</text>
+  <path d="M624 148L627.5 148Q631 148 631 151.5L631 670Q631 678 639 678L1015 678Q1023 678 1023 686L1023 844"/>
+  <path d="M1023 172V844"/>
+  <path d="M1023 172H1062"/><text class="count" x="1057" y="168" text-anchor="end">0..1</text>
+  <path d="M1023 284H1062"/><text class="count" x="1057" y="280" text-anchor="end">0..1</text>
+  <path d="M1023 396H1062"/><text class="count" x="1057" y="392" text-anchor="end">0..1</text>
+  <path d="M1023 508H1062"/><text class="count" x="1057" y="504" text-anchor="end">0..1</text>
+  <path d="M1023 620H1062"/><text class="count" x="1057" y="616" text-anchor="end">0..1</text>
+  <path d="M1023 732H1062"/><text class="count" x="1057" y="728" text-anchor="end">0..1</text>
+  <path d="M1023 844H1062"/><text class="count" x="1057" y="840" text-anchor="end">0..1</text>
+  </g>
+  <g transform="translate(32,106)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">users</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">email</text>
+    <text class="type" x="242" y="70" text-anchor="end">varchar</text>
+    <text class="key" x="164" y="70" text-anchor="end">UQ</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">password</text>
+    <text class="type" x="242" y="94" text-anchor="end">varchar</text>
+    <rect y="102" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="118">nickname</text>
+    <text class="type" x="242" y="118" text-anchor="end">varchar</text>
+    <rect y="126" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="142">address</text>
+    <text class="type" x="242" y="142" text-anchor="end">varchar</text>
+    <rect y="150" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="166">profile_image</text>
+    <text class="type" x="242" y="166" text-anchor="end">varchar</text>
+    <rect y="174" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="190">kakao_id</text>
+    <text class="type" x="242" y="190" text-anchor="end">varchar</text>
+    <text class="key" x="164" y="190" text-anchor="end">UQ</text>
+    <rect y="198" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="214">kakao_signup_completed</text>
+    <text class="type" x="242" y="214" text-anchor="end">boolean</text>
+  </g>
+  <g transform="translate(372,106)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">board</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">seller_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">buyer_id</text>
+    <text class="type" x="242" y="94" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="94" text-anchor="end">FK?</text>
+    <rect y="102" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="118">title</text>
+    <text class="type" x="242" y="118" text-anchor="end">varchar</text>
+    <rect y="126" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="142">description</text>
+    <text class="type" x="242" y="142" text-anchor="end">varchar</text>
+    <rect y="150" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="166">size</text>
+    <text class="type" x="242" y="166" text-anchor="end">varchar</text>
+    <rect y="174" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="190">sex</text>
+    <text class="type" x="242" y="190" text-anchor="end">varchar</text>
+    <rect y="198" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="214">latitude</text>
+    <text class="type" x="242" y="214" text-anchor="end">double</text>
+    <rect y="222" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="238">longitude</text>
+    <text class="type" x="242" y="238" text-anchor="end">double</text>
+    <rect y="246" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="262">detail_address</text>
+    <text class="type" x="242" y="262" text-anchor="end">varchar</text>
+    <rect y="270" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="286">price</text>
+    <text class="type" x="242" y="286" text-anchor="end">bigint</text>
+    <rect y="294" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="310">start_date</text>
+    <text class="type" x="242" y="310" text-anchor="end">date</text>
+    <rect y="318" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="334">end_date</text>
+    <text class="type" x="242" y="334" text-anchor="end">date</text>
+    <rect y="342" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="358">category</text>
+    <text class="type" x="242" y="358" text-anchor="end">varchar</text>
+    <rect y="366" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="382">status</text>
+    <text class="type" x="242" y="382" text-anchor="end">varchar</text>
+    <rect y="390" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="406">created_at</text>
+    <text class="type" x="242" y="406" text-anchor="end">datetime</text>
+    <rect y="414" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="430">modified_at</text>
+    <text class="type" x="242" y="430" text-anchor="end">datetime</text>
+  </g>
+  <g transform="translate(710,106)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">chat_room</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">seller_id</text>
+    <text class="type" x="242" y="94" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="94" text-anchor="end">FK</text>
+    <rect y="102" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="118">wearer_id</text>
+    <text class="type" x="242" y="118" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="118" text-anchor="end">FK</text>
+    <rect y="126" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="142">created_at</text>
+    <text class="type" x="242" y="142" text-anchor="end">datetime</text>
+  </g>
+  <g transform="translate(32,449)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">wishlist</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">user_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">board_id</text>
+    <text class="type" x="242" y="94" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="94" text-anchor="end">FK</text>
+    <rect y="102" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="118">created_at</text>
+    <text class="type" x="242" y="118" text-anchor="end">datetime</text>
+    <text x="2" y="144" font-size="12">복합 UQ (user_id, board_id)</text>
+  </g>
+  <g transform="translate(372,610)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">board_images</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46">board_id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">FK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">image_path</text>
+    <text class="type" x="242" y="70" text-anchor="end">varchar</text>
+  </g>
+  <g transform="translate(710,412)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">chat_message</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">chat_room_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">sender_id</text>
+    <text class="type" x="242" y="94" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="94" text-anchor="end">FK</text>
+    <rect y="102" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="118">image_id</text>
+    <text class="type" x="242" y="118" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="118" text-anchor="end">FK?+UQ</text>
+    <rect y="126" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="142">message</text>
+    <text class="type" x="242" y="142" text-anchor="end">varchar(1000)</text>
+    <rect y="150" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="166">is_read</text>
+    <text class="type" x="242" y="166" text-anchor="end">boolean</text>
+    <rect y="174" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="190">sent_at</text>
+    <text class="type" x="242" y="190" text-anchor="end">datetime</text>
+  </g>
+  <g transform="translate(710,725)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">chat_image</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">content_type</text>
+    <text class="type" x="242" y="70" text-anchor="end">varchar(32)</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">content</text>
+    <text class="type" x="242" y="94" text-anchor="end">mediumblob</text>
+  </g>
+  <g transform="translate(32,626)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">refresh_token</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">username</text>
+    <text class="type" x="242" y="70" text-anchor="end">varchar</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">refresh_token</text>
+    <text class="type" x="242" y="94" text-anchor="end">varchar</text>
+    <text class="key" x="164" y="94" text-anchor="end">UQ</text>
+  </g>
+  <g transform="translate(32,757)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">kakao_user</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">kakao_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">varchar</text>
+    <text class="key" x="164" y="70" text-anchor="end">UQ</text>
+    <rect y="78" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="94">email</text>
+    <text class="type" x="242" y="94" text-anchor="end">varchar</text>
+    <rect y="102" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="118">nickname</text>
+    <text class="type" x="242" y="118" text-anchor="end">varchar</text>
+  </g>
+  <g transform="translate(1062,106)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">top</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <g transform="translate(1062,218)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">bottom</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <g transform="translate(1062,330)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">outer_</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <g transform="translate(1062,442)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">one_piece</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <g transform="translate(1062,554)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">jewelry</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <g transform="translate(1062,666)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">shoes</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <g transform="translate(1062,778)">
+    <rect width="252" height="30" fill="#202229"/>
+    <text class="table-name" x="10" y="20">bag</text>
+    <rect y="30" width="252" height="24" fill="#494e59"/>
+    <text class="column" x="10" y="46" font-weight="bold">id</text>
+    <text class="type" x="242" y="46" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="46" text-anchor="end">PK</text>
+    <rect y="54" width="252" height="24" fill="#353943"/>
+    <text class="column" x="10" y="70">board_id</text>
+    <text class="type" x="242" y="70" text-anchor="end">bigint</text>
+    <text class="key" x="164" y="70" text-anchor="end">FK?+UQ</text>
+  </g>
+  <text x="32" y="915" font-size="13">PK 기본 키 · FK 외래 키 · UQ 유일 제약 · ? NULL 허용 · * 0개 이상</text>
+</svg>
