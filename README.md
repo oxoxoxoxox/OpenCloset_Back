@@ -82,17 +82,13 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 > 기획 배경과 사용자 의견은 프로젝트 당시 조사와 발표자료를 바탕으로 정리했습니다.
 
-<details>
-<summary>화면 설계와 사용자 흐름</summary>
+### 화면 설계와 사용자 흐름
 
 ![홈, 상품 등록과 검색, 상품 상세, 채팅으로 이어지는 Open Closet 화면 설계](docs/images/user-flow.png)
 
-</details>
-
 ## 핵심 기능
 
-<details open>
-<summary><strong>동네 상품 탐색과 찜</strong></summary>
+### 동네 상품 탐색과 찜
 
 **프로필 주소를 기준으로 동네 상품을 찾고 관심 상품을 저장합니다.**
 
@@ -104,10 +100,7 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 | :---: | :---: | :---: |
 | <img src="docs/images/screenshots/search.png" alt="검색어와 필터를 적용한 상품 검색 결과" width="150" /> | <img src="docs/images/screenshots/item-create.png" alt="사진과 대여 조건을 입력하는 상품 등록 화면" width="150" /> | <img src="docs/images/screenshots/wishlist.png" alt="찜한 상품 목록" width="150" /> |
 
-</details>
-
-<details>
-<summary><strong>대여 내역과 상태 관리</strong></summary>
+### 대여 내역과 상태 관리
 
 **상품의 제공자와 대여자를 연결해 빌려준 내역과 빌린 내역을 역할별로 조회합니다.**
 
@@ -119,10 +112,7 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 ![대여 가능, 예약 중, 대여 중, 대여 완료의 상태 전이와 서버 검증 규칙](docs/images/rental-state.png)
 
-</details>
-
-<details>
-<summary><strong>거래 채팅</strong></summary>
+### 거래 채팅
 
 **상품을 기준으로 채팅방을 만들고 메시지와 이미지를 주고받습니다.**
 
@@ -136,10 +126,7 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 | :---: | :---: |
 | <img src="docs/images/screenshots/chat-list.png" alt="상품별 채팅 목록" width="170" /> | <img src="docs/images/screenshots/chat-detail.png" alt="텍스트와 상품 사진을 주고받는 채팅 화면" width="170" /> |
 
-</details>
-
-<details>
-<summary><strong>회원과 인증</strong></summary>
+### 회원과 인증
 
 **일반 로그인과 카카오 로그인으로 접속하고 프로필과 계정을 관리합니다.**
 
@@ -150,8 +137,6 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 | 비밀번호 변경 | 회원 탈퇴 |
 | :---: | :---: |
 | <img src="docs/images/screenshots/password-change.png" alt="현재 비밀번호와 새 비밀번호를 입력하는 화면" width="170" /> | <img src="docs/images/screenshots/account-delete.png" alt="비밀번호 확인이 필요한 회원 탈퇴 화면" width="170" /> |
-
-</details>
 
 ## 시스템 아키텍처
 
@@ -214,14 +199,11 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 [변경 전 측정 원본](docs/performance/board-pagination-before.json) · [변경 후 측정 원본](docs/performance/board-pagination-after.json)에는 요청별 응답 시간과 SQL 실행 횟수가 기록되어 있습니다. 2026년 11월 11일 측정 기록이며, 원본의 요청별 값으로 p95와 SQL 횟수를 대조했습니다.
 
-<details>
-<summary>커서 경계와 테스트</summary>
+### 커서 경계와 테스트
 
 커서 단위 테스트는 잘못된 형식과 수정 시각의 정밀도를 검증합니다. HTTP 통합 테스트는 같은 수정 시각을 가진 상품이 페이지 경계에 놓인 경우와 다음 페이지·마지막 페이지 처리, 잘못된 커서 요청을 확인합니다. 여러 페이지를 조회하는 사이에 상품의 수정 시각이 바뀌면 순서가 달라질 수 있습니다. 첫 페이지부터 다시 조회하면 현재 순서를 확인할 수 있습니다.
 
 [목록 개선 커밋](https://github.com/DevFlow-DEU/OpenCloset_Back/commit/6b79af59f71462c92515bbe91158a64acc9372fd) · [커서 조회 구현](src/main/java/DevFlow/OpenCloset_Back/Board/Repository/BoardListRepository.java) · [커서 단위 테스트](src/test/java/DevFlow/OpenCloset_Back/Board/BoardListCursorTest.java) · [HTTP 통합 테스트](src/test/java/DevFlow/OpenCloset_Back/Board/BoardPaginationIntegrationTest.java)
-
-</details>
 
 ## 대표 API
 
@@ -235,8 +217,7 @@ Controller의 실제 매핑을 기준으로 정리했습니다. `/board/All`의 
 | 대여 | GET | `/board/my/owner` · `/board/my/renter` | 빌려준 내역 · 빌린 내역 조회 |
 | 채팅 | POST | `/chat/room` | 상품 기준 채팅방 생성·조회 |
 
-<details>
-<summary>추가 API 및 Controller 코드 보기</summary>
+### 추가 API와 Controller 코드
 
 | 영역 | HTTP 메서드 | 경로 | 기능 |
 | --- | --- | --- | --- |
@@ -253,8 +234,6 @@ Controller의 실제 매핑을 기준으로 정리했습니다. `/board/All`의 
 실시간 텍스트 전송은 HTTP API와 구분됩니다. STOMP의 전송 경로는 `/app/chat/send`, 구독 경로는 `/topic/chat/{roomId}`입니다. 상품·프로필 이미지는 파일로 저장하고 `/uploads/**`의 정적 리소스로 제공하며, 채팅 이미지는 위의 참여자 전용 API로 제공합니다.
 
 매핑 근거: [상품 Controller](src/main/java/DevFlow/OpenCloset_Back/Board/Controller/BoardController.java) · [채팅 Controller](src/main/java/DevFlow/OpenCloset_Back/Chat/Controller/ChatController.java) · [회원가입](src/main/java/DevFlow/OpenCloset_Back/User/User_Controller/RegistrationController.java) · [로그인](src/main/java/DevFlow/OpenCloset_Back/Login/Login_Controller/LoginController.java) · [토큰 갱신](src/main/java/DevFlow/OpenCloset_Back/Login/Login_Controller/TokenRefreshController.java) · [프로필](src/main/java/DevFlow/OpenCloset_Back/User/User_Controller/MyPageController.java)
-
-</details>
 
 ## 기술 스택
 
@@ -297,3 +276,64 @@ Controller의 실제 매핑을 기준으로 정리했습니다. `/board/All`의 
   <img src="https://img.shields.io/badge/Springdoc%20OpenAPI-3F7526?style=for-the-badge&amp;logo=openapiinitiative&amp;logoColor=white" alt="Springdoc OpenAPI" />
   <img src="https://img.shields.io/badge/Swagger%20UI-43671B?style=for-the-badge&amp;logo=swagger&amp;logoColor=white" alt="Swagger UI" />
 </p>
+
+## 로컬 실행
+
+Docker와 Docker Compose가 필요합니다. 저장소 루트에서 처음 실행할 때 [환경 변수 예제](.env.example)를 `.env`로 복사합니다. 기존 `.env`가 있으면 현재 설정을 사용합니다.
+
+```powershell
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+```
+
+| 환경 변수 | 용도 |
+| --- | --- |
+| `DB_USERNAME`, `DB_PASSWORD`, `DB_ROOT_PASSWORD` | 로컬 MariaDB 계정과 비밀번호. 처음 시작하기 전에 설정합니다. |
+| `APP_PORT`, `DB_PORT`, `REDIS_PORT` | 호스트에서 접속할 포트. 기본값은 각각 `8080`, `13306`, `6379`입니다. |
+| `EMAIL_PASSWORD`, `KAKAO_CLIENT_ID`, `KAKAO_CLIENT_SECRET`, `KAKAO_REDIRECT_URI` | 메일 발송과 카카오 로그인에 필요한 설정. 해당 기능을 사용할 때 개발용 값을 입력합니다. |
+
+Compose 안에서는 애플리케이션이 MariaDB의 `db:3306`과 Redis의 `redis:6379`에 접속합니다. 예제 파일의 `DB_URL`과 `REDIS_HOST`는 IDE에서 직접 실행할 때 쓰는 값입니다.
+
+```powershell
+docker compose -f docker-compose.local.yml up -d --build
+```
+
+애플리케이션 시작 후 [Swagger UI](http://localhost:8080/swagger-ui/index.html)와 [OpenAPI JSON](http://localhost:8080/v3/api-docs)에서 API를 확인할 수 있습니다. `APP_PORT`를 변경했다면 접속 주소의 포트도 바꿉니다.
+
+새 DB 볼륨에서는 MariaDB가 `OpenCloset` 데이터베이스와 계정을 만들고, 애플리케이션이 시작되면 Hibernate의 `ddl-auto=update` 설정에 따라 테이블을 생성하거나 갱신합니다. 상품 목록을 확인하려면 Swagger에서 회원을 등록하고 프로필 주소를 설정한 뒤 상품을 등록합니다.
+
+실행을 종료하려면 아래 명령을 사용합니다. DB, Redis, 업로드 파일은 볼륨에 남습니다.
+
+```powershell
+docker compose -f docker-compose.local.yml down
+```
+
+로컬 데이터를 처음부터 다시 만들 때만 아래 명령을 실행한 뒤 다시 시작합니다.
+
+> [!WARNING]
+> 이 명령은 MariaDB, Redis, 업로드 파일의 로컬 데이터를 모두 삭제합니다.
+
+```powershell
+docker compose -f docker-compose.local.yml down --volumes
+```
+
+## 배포 구성
+
+[로컬 Compose](docker-compose.local.yml)는 애플리케이션, MariaDB, Redis를 각각 컨테이너로 실행하고 DB·Redis 상태를 확인한 뒤 애플리케이션을 시작합니다.
+
+[GitHub Actions 워크플로](.github/workflows/deploy.yml)의 현재 배포 절차는 다음과 같습니다.
+
+1. `main` 또는 `jin_part` 브랜치에 push하면 실행됩니다.
+2. SSH로 서버에 접속하고 `/home/ubuntu/OpenCloset_Back`에서 푸시된 브랜치를 fetch·checkout·pull합니다.
+3. 서버에서 `./gradlew clean build -x test`를 실행합니다. **배포 빌드에서 테스트는 실행하지 않습니다.**
+4. `sudo docker compose up -d --build --force-recreate`로 이미지를 빌드하고 컨테이너를 재생성한 뒤 사용하지 않는 이미지를 정리합니다.
+
+[서버 Compose](docker-compose.yml)는 애플리케이션, MariaDB, Redis를 실행합니다. Redis의 healthcheck를 기다리지만 DB는 컨테이너 시작 여부만 확인합니다.
+
+**배포 확인:** [Actions 실행 이력](https://github.com/DevFlow-DEU/OpenCloset_Back/actions)으로 명령의 성공 여부를 확인하고, 서버에서 `sudo docker compose ps`, `sudo docker compose logs --tail=100 app` 및 실제 API 응답을 함께 확인해야 합니다. 현재 워크플로의 성공 메시지는 재배포 명령의 완료를 뜻하며, HTTP 응답이나 서비스 정상 동작을 자동 검증하지 않습니다.
+
+**향후 개선:** 배포 전 테스트 실행과 재배포 후 HTTP 확인 단계를 추가하는 것이 필요합니다. 현재 구현된 자동화와 구분해 개선 과제로 남깁니다.
+
+## 참고 자료
+
+- [Open Closet Notion 프로젝트 정리](https://app.notion.com/p/2eed6df1c80d81af8663c920713b386e)
+- [README 구성 참고 · All-Life](https://github.com/ByeolNabi/All-Life)
