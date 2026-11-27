@@ -1,12 +1,35 @@
-# Open Closet
+<h1 align="center">Open Closet</h1>
 
-**동네에서 옷을 찾고 빌리는 지역 기반 P2P 의류 대여 서비스의 백엔드입니다.**
+<p align="center"><strong>동네에서 옷을 찾고 빌리는 지역 기반 P2P 의류 대여 서비스의 백엔드</strong></p>
 
-**Java 17 · Spring Boot 3.4.4 · Spring Data JPA · MariaDB · Redis · Docker**
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17-087E79?style=flat-square" alt="Java 17" />
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.4.4-087E79?style=flat-square" alt="Spring Boot 3.4.4" />
+  <img src="https://img.shields.io/badge/Spring%20Data-JPA-087E79?style=flat-square" alt="Spring Data JPA" />
+  <img src="https://img.shields.io/badge/DB-MariaDB-087E79?style=flat-square" alt="MariaDB" />
+  <img src="https://img.shields.io/badge/Pub%2FSub-Redis-087E79?style=flat-square" alt="Redis" />
+  <img src="https://img.shields.io/badge/Containers-Docker-087E79?style=flat-square" alt="Docker" />
+  <img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-087E79?style=flat-square" alt="GitHub Actions" />
+</p>
 
-상품·대여 도메인 설계와 API 구현, 실시간 채팅, 상품 목록 조회 성능 개선, 배포 자동화를 담당했습니다.
+<p align="center">
+  <a href="https://github.com/oxoxoxoxox/OpenCloset_Back">GitHub 저장소</a> ·
+  <a href="#담당-역할">담당 역할</a> ·
+  <a href="#상품-목록-조회-개선">성능 개선</a> ·
+  <a href="docs/database-erd.md">DB 설계 문서</a>
+</p>
 
-<img src="https://github.com/user-attachments/assets/7e898790-4d03-40f5-9601-8899ab514033" alt="Open Closet 프로젝트 소개 화면" width="860" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/7e898790-4d03-40f5-9601-8899ab514033" alt="Open Closet 프로젝트 소개 화면" width="860" />
+</p>
+
+> 상품·대여 도메인 설계와 API 구현, 실시간 채팅, 상품 목록 조회 성능 개선, 배포 자동화를 담당했습니다.
+
+## 목차
+
+- **프로젝트** · [서비스 소개](#서비스-소개) · [담당 역할](#담당-역할) · [기획 배경](#기획-배경) · [핵심 기능](#핵심-기능)
+- **백엔드 설계와 구현** · [시스템 아키텍처](#시스템-아키텍처) · [DB 설계](#db-설계) · [상품 목록 조회 개선](#상품-목록-조회-개선) · [대표 API](#대표-api)
+- **개발과 운영** · [기술 스택](#기술-스택) · [로컬 실행](#로컬-실행) · [배포 구성](#배포-구성) · [참고 자료](#참고-자료)
 
 ## 서비스 소개
 
@@ -22,6 +45,14 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 초기 프로젝트 이후에도 팀원들과 개발을 이어가고 있습니다. 현재는 2026년 12월 출시를 목표로 기능을 보완하고 있습니다.
 
 [GitHub 기여자](https://github.com/DevFlow-DEU/OpenCloset_Back/graphs/contributors)
+
+### 앱 화면
+
+홈에서 동네 상품을 둘러보고 검색 결과에서 원하는 옷을 찾습니다. 상품 상세에서 대여 가격과 상품 정보를 확인한 뒤 채팅으로 문의할 수 있습니다.
+
+| 홈 | 검색 결과 | 상품 상세 |
+| :---: | :---: | :---: |
+| <img src="docs/images/screenshots/home.png" alt="동네 상품과 카테고리가 표시된 홈" width="150" /> | <img src="docs/images/screenshots/search.png" alt="검색어와 필터를 적용한 상품 검색 결과" width="150" /> | <img src="docs/images/screenshots/item-detail.png" alt="상품 사진, 대여 가격, 채팅 버튼이 있는 상세 화면" width="150" /> |
 
 ## 담당 역할
 
@@ -63,16 +94,28 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 <details open>
 <summary><strong>동네 상품 탐색과 찜</strong></summary>
 
+**프로필 주소를 기준으로 동네 상품을 찾고 관심 상품을 저장합니다.**
+
 - 로그인한 사용자의 프로필 주소와 제공자의 프로필 주소가 같은 상품을 기본 목록에 보여 줍니다.
 - 상품 등록 시 이미지, 상세 주소, 거래 장소의 위도·경도를 저장합니다. 검색에서는 키워드와 카테고리, 가격 등의 조건으로 상품을 찾을 수 있습니다.
 - 상품을 찜할 수 있으며, 기본 목록에서는 현재 페이지에 포함된 상품의 찜 여부를 함께 확인할 수 있습니다.
+
+| 검색 결과 | 상품 등록 | 좋아요 |
+| :---: | :---: | :---: |
+| <img src="docs/images/screenshots/search.png" alt="검색어와 필터를 적용한 상품 검색 결과" width="150" /> | <img src="docs/images/screenshots/item-create.png" alt="사진과 대여 조건을 입력하는 상품 등록 화면" width="150" /> | <img src="docs/images/screenshots/wishlist.png" alt="찜한 상품 목록" width="150" /> |
 
 </details>
 
 <details>
 <summary><strong>대여 내역과 상태 관리</strong></summary>
 
-상품에 제공자와 대여자를 연결하고, 빌려준 상품과 빌린 상품을 역할별로 조회할 수 있도록 구성했습니다. 상태 변경은 상품 소유자만 요청할 수 있으며, 예약 단계에서 대여자를 지정합니다. 대여가 끝난 뒤에도 대여자 관계를 유지해 내역 조회에 활용합니다.
+**상품의 제공자와 대여자를 연결해 빌려준 내역과 빌린 내역을 역할별로 조회합니다.**
+
+상태 변경은 상품 소유자만 요청할 수 있으며, 예약 단계에서 대여자를 지정합니다. 대여가 끝난 뒤에도 대여자 관계를 유지해 내역 조회에 활용합니다.
+
+| 앱에서 표시되는 예약 상태 |
+| :---: |
+| <img src="docs/images/screenshots/wishlist.png" alt="찜한 상품 사진 위에 예약중 상태가 표시된 화면" width="170" /> |
 
 ![대여 가능, 예약 중, 대여 중, 대여 완료의 상태 전이와 서버 검증 규칙](docs/images/rental-state.png)
 
@@ -81,7 +124,7 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 <details>
 <summary><strong>거래 채팅</strong></summary>
 
-상품을 기준으로 채팅방을 생성하고 사용자 간 메시지와 이미지를 주고받을 수 있도록 구현했습니다.
+**상품을 기준으로 채팅방을 만들고 메시지와 이미지를 주고받습니다.**
 
 - WebSocket/STOMP 메시지 송수신과 채팅방 참여자 접근 검증
 - 대화 내역 조회, 이미지 업로드·조회
@@ -89,14 +132,24 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 애플리케이션의 Redis 리스너가 메시지를 받아 STOMP의 `/topic/chat/{roomId}` 구독자에게 전달합니다. 채팅 이미지는 MariaDB에 바이너리 데이터로 저장하고, 참여자를 검증한 HTTP API로 제공합니다.
 
+| 채팅 목록 | 채팅 상세 |
+| :---: | :---: |
+| <img src="docs/images/screenshots/chat-list.png" alt="상품별 채팅 목록" width="170" /> | <img src="docs/images/screenshots/chat-detail.png" alt="텍스트와 상품 사진을 주고받는 채팅 화면" width="170" /> |
+
 </details>
 
 <details>
 <summary><strong>회원과 인증</strong></summary>
 
+**일반 로그인과 카카오 로그인으로 접속하고 프로필과 계정을 관리합니다.**
+
 - **인증** — 회원가입, 일반 로그인과 카카오 로그인, JWT 요청 인증과 토큰 갱신
 - **인가** — 상품 수정·대여 상태 변경 시 소유자 확인, 채팅방 접근 시 참여자 확인
 - **계정 관리** — 프로필 조회·수정, 비밀번호 변경과 탈퇴
+
+| 비밀번호 변경 | 회원 탈퇴 |
+| :---: | :---: |
+| <img src="docs/images/screenshots/password-change.png" alt="현재 비밀번호와 새 비밀번호를 입력하는 화면" width="170" /> | <img src="docs/images/screenshots/account-delete.png" alt="비밀번호 확인이 필요한 회원 탈퇴 화면" width="170" /> |
 
 </details>
 
@@ -108,7 +161,11 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 ## DB 설계
 
+### 테이블 관계도
+
 ![Open Closet DB 설계도: 테이블, 컬럼, 자료형 및 외래 키 관계](docs/images/database-erd.svg)
+
+### 주요 관계
 
 - **상품 등록** — `board.seller_id`로 등록한 회원(`users`)을 연결합니다. 한 회원이 여러 상품을 등록할 수 있습니다.
 - **대여 내역** — 예약 시 `board.buyer_id`에 대여자를 지정하고, 대여 완료 후에도 관계를 유지해 빌린 내역을 조회합니다.
@@ -123,28 +180,33 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 기존 `GET /board/All`은 첫 화면에도 주소가 같은 상품을 모두 반환했습니다. 상품마다 이미지를 추가 조회하고 로그인 사용자의 전체 찜 목록을 읽어, 상품 수가 늘어날수록 응답량과 SQL 실행 횟수가 증가했습니다.
 
-### 개선 내용
+### 개선 방법과 구현
 
 | 변경 | 구현 |
 | --- | --- |
 | 커서 기반 페이지네이션 | `modifiedAt DESC, id DESC` 정렬과 수정 시각·ID 커서로 다음 상품부터 조회 |
 | 페이지 크기 제한 | 기본 20개 반환, 한 행을 더 조회해 `hasNext` 판단 |
 | 연관 데이터 일괄 조회 | 판매자·구매자는 목록 쿼리에서 함께 조회하고, 이미지·찜 여부는 현재 페이지의 상품 ID로 각각 일괄 조회 |
-| 테스트 | 잘못된 커서, 같은 수정 시각의 페이지 경계, 다음·마지막 페이지를 단위·HTTP 통합 테스트로 검증 |
 
 응답은 `items`, `nextCursor`, `hasNext`로 구성합니다.
 
 목록 쿼리에서는 단일 연관관계인 제공자·대여자만 함께 조회해 상품 수를 기준으로 조회 범위를 제한합니다. 여러 이미지가 연결된 컬렉션은 페이지의 상품 ID를 확정한 뒤 별도로 일괄 조회해, 이미지 행 수가 페이지 크기에 영향을 주지 않도록 했습니다. 수정 시각이 같은 상품은 ID를 추가 정렬 기준으로 사용해 페이지 경계를 구분합니다.
+
+### 테스트 방법
+
+잘못된 커서, 같은 수정 시각의 페이지 경계, 다음·마지막 페이지를 단위·HTTP 통합 테스트로 검증합니다.
 
 ### 로컬 측정 결과
 
 | 지표 | 변경 전 | 변경 후 |
 | --- | ---: | ---: |
 | 첫 화면 반환 상품 | 4,000개 | 20개 |
-| 첫 화면 p95 응답 시간 | 1,784.6ms | 31.6ms |
-| 요청당 SQL 실행 횟수 | 4,088회 | 5회 |
+| **첫 화면 p95 응답 시간** | 1,784.6ms | **31.6ms** |
+| **요청당 SQL 실행 횟수** | 4,088회 | **5회** |
 
-수치는 **첫 화면에 필요한 20개만 반환하는 페이지네이션과 연관 데이터 일괄 조회를 함께 적용한 결과**입니다. 변경 전후 반환량이 다르므로 동일한 작업량의 쿼리 성능 비교가 아니며, 각 변경의 효과를 개별적으로 분리해 측정한 결과도 아닙니다. 운영 환경의 동시 접속 처리량을 나타내지 않습니다.
+### 측정 조건과 한계
+
+> 수치는 **첫 화면에 필요한 20개만 반환하는 페이지네이션과 연관 데이터 일괄 조회를 함께 적용한 결과**입니다. 변경 전후 반환량이 다르므로 동일한 작업량의 쿼리 성능 비교가 아니며, 각 변경의 효과를 개별적으로 분리해 측정한 결과도 아닙니다. 운영 환경의 동시 접속 처리량을 나타내지 않습니다.
 
 - **환경·데이터** — 로컬 MariaDB, 전체 상품 5,000개 중 주소 일치 상품 4,000개
 - **요청** — 워밍업 5회 후 각 조건에서 30회 순차 요청
@@ -165,7 +227,7 @@ Open Closet은 사용하지 않는 옷을 이웃에게 빌려주고, 필요한 �
 
 Controller의 실제 매핑을 기준으로 정리했습니다. `/board/All`의 대소문자도 구현과 같습니다. 상품·프로필·채팅 이미지 업로드는 `multipart/form-data`를 사용합니다.
 
-| 영역 | Method | 경로 | 기능 |
+| 영역 | HTTP 메서드 | 경로 | 기능 |
 | --- | --- | --- | --- |
 | 상품 | POST | `/board/create` | 상품과 이미지 등록 |
 | 상품 | GET | `/board/All` | 내 동네 상품의 커서 기반 목록 조회 |
@@ -176,7 +238,7 @@ Controller의 실제 매핑을 기준으로 정리했습니다. `/board/All`의 
 <details>
 <summary>추가 API 및 Controller 코드 보기</summary>
 
-| 영역 | Method | 경로 | 기능 |
+| 영역 | HTTP 메서드 | 경로 | 기능 |
 | --- | --- | --- | --- |
 | 상품 | GET | `/board/{id}` | 상품 상세 조회 |
 | 상품 | PUT | `/board/{id}` | 소유자의 상품 수정 |
@@ -196,64 +258,42 @@ Controller의 실제 매핑을 기준으로 정리했습니다. `/board/All`의 
 
 ## 기술 스택
 
-| 영역 | 기술 |
-| --- | --- |
-| API | Java 17, Spring Boot 3.4.4, Spring Security, JWT |
-| 데이터 | Spring Data JPA, Hibernate, MariaDB |
-| 채팅 | WebSocket, STOMP, Redis Pub/Sub |
-| 빌드·실행·배포 | Gradle Wrapper, Docker Compose, GitHub Actions |
-| API 문서 | Springdoc OpenAPI, Swagger UI |
+<h3 align="center">백엔드 API</h3>
 
-## 로컬 실행
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17-B35C28?style=for-the-badge" alt="Java 17" />
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.4.4-3F7526?style=for-the-badge&amp;logo=springboot&amp;logoColor=white" alt="Spring Boot 3.4.4" />
+  <img src="https://img.shields.io/badge/Spring%20Security-3F7526?style=for-the-badge&amp;logo=springsecurity&amp;logoColor=white" alt="Spring Security" />
+  <img src="https://img.shields.io/badge/JWT-304353?style=for-the-badge&amp;logo=jsonwebtokens&amp;logoColor=white" alt="JWT" />
+</p>
 
-Docker와 Docker Compose가 필요합니다. 저장소 루트에서 처음 실행할 때 [환경 변수 예제](.env.example)를 `.env`로 복사합니다. 기존 `.env`가 있으면 현재 설정을 사용합니다.
+<h3 align="center">데이터베이스와 ORM</h3>
 
-```powershell
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/Spring%20Data%20JPA-3F7526?style=for-the-badge&amp;logo=spring&amp;logoColor=white" alt="Spring Data JPA" />
+  <img src="https://img.shields.io/badge/Hibernate-625C42?style=for-the-badge&amp;logo=hibernate&amp;logoColor=white" alt="Hibernate" />
+  <img src="https://img.shields.io/badge/MariaDB-23506D?style=for-the-badge&amp;logo=mariadb&amp;logoColor=white" alt="MariaDB" />
+</p>
 
-| 환경 변수 | 용도 |
-| --- | --- |
-| `DB_USERNAME`, `DB_PASSWORD`, `DB_ROOT_PASSWORD` | 로컬 MariaDB 계정과 비밀번호. 처음 시작하기 전에 설정합니다. |
-| `APP_PORT`, `DB_PORT`, `REDIS_PORT` | 호스트에서 접속할 포트. 기본값은 각각 `8080`, `13306`, `6379`입니다. |
-| `EMAIL_PASSWORD`, `KAKAO_CLIENT_ID`, `KAKAO_CLIENT_SECRET`, `KAKAO_REDIRECT_URI` | 메일 발송과 카카오 로그인에 필요한 설정. 해당 기능을 사용할 때 개발용 값을 입력합니다. |
+<h3 align="center">실시간 채팅</h3>
 
-Compose 안에서는 애플리케이션이 MariaDB의 `db:3306`과 Redis의 `redis:6379`에 접속합니다. 예제 파일의 `DB_URL`과 `REDIS_HOST`는 IDE에서 직접 실행할 때 쓰는 값입니다.
+<p align="center">
+  <img src="https://img.shields.io/badge/WebSocket-087E79?style=for-the-badge" alt="WebSocket" />
+  <img src="https://img.shields.io/badge/STOMP-3D5265?style=for-the-badge" alt="STOMP" />
+  <img src="https://img.shields.io/badge/Redis-Pub%2FSub-AC342A?style=for-the-badge&amp;logo=redis&amp;logoColor=white" alt="Redis Pub/Sub" />
+</p>
 
-```powershell
-docker compose -f docker-compose.local.yml up -d --build
-```
+<h3 align="center">빌드와 배포</h3>
 
-애플리케이션 시작 후 [Swagger UI](http://localhost:8080/swagger-ui/index.html)와 [OpenAPI JSON](http://localhost:8080/v3/api-docs)에서 API를 확인할 수 있습니다. `APP_PORT`를 변경했다면 접속 주소의 포트도 바꿉니다.
+<p align="center">
+  <img src="https://img.shields.io/badge/Gradle%20Wrapper-164653?style=for-the-badge&amp;logo=gradle&amp;logoColor=white" alt="Gradle Wrapper" />
+  <img src="https://img.shields.io/badge/Docker%20Compose-1764AF?style=for-the-badge&amp;logo=docker&amp;logoColor=white" alt="Docker Compose" />
+  <img src="https://img.shields.io/badge/GitHub%20Actions-225DA5?style=for-the-badge&amp;logo=githubactions&amp;logoColor=white" alt="GitHub Actions" />
+</p>
 
-새 DB 볼륨에서는 MariaDB가 `OpenCloset` 데이터베이스와 계정을 만들고, 애플리케이션이 시작되면 Hibernate의 `ddl-auto=update` 설정에 따라 테이블을 생성하거나 갱신합니다. 상품 목록을 확인하려면 Swagger에서 회원을 등록하고 프로필 주소를 설정한 뒤 상품을 등록합니다.
+<h3 align="center">API 문서</h3>
 
-실행을 종료하려면 아래 명령을 사용합니다. DB, Redis, 업로드 파일은 볼륨에 남습니다.
-
-```powershell
-docker compose -f docker-compose.local.yml down
-```
-
-로컬 데이터를 처음부터 다시 만들 때만 `docker compose -f docker-compose.local.yml down --volumes`를 실행한 뒤 다시 시작합니다. **이 명령은 MariaDB, Redis, 업로드 파일의 로컬 데이터를 모두 삭제합니다.**
-
-## 배포 구성
-
-[로컬 Compose](docker-compose.local.yml)는 애플리케이션, MariaDB, Redis를 각각 컨테이너로 실행하고 DB·Redis 상태를 확인한 뒤 애플리케이션을 시작합니다.
-
-[GitHub Actions 워크플로](.github/workflows/deploy.yml)의 현재 배포 절차는 다음과 같습니다.
-
-1. `main` 또는 `jin_part` 브랜치에 push하면 실행됩니다.
-2. SSH로 서버에 접속하고 `/home/ubuntu/OpenCloset_Back`에서 푸시된 브랜치를 fetch·checkout·pull합니다.
-3. 서버에서 `./gradlew clean build -x test`를 실행합니다. **배포 빌드에서 테스트는 실행하지 않습니다.**
-4. `sudo docker compose up -d --build --force-recreate`로 이미지를 빌드하고 컨테이너를 재생성한 뒤 사용하지 않는 이미지를 정리합니다.
-
-[서버 Compose](docker-compose.yml)는 애플리케이션, MariaDB, Redis를 실행합니다. Redis의 healthcheck를 기다리지만 DB는 컨테이너 시작 여부만 확인합니다.
-
-**배포 확인:** [Actions 실행 이력](https://github.com/DevFlow-DEU/OpenCloset_Back/actions)으로 명령의 성공 여부를 확인하고, 서버에서 `sudo docker compose ps`, `sudo docker compose logs --tail=100 app` 및 실제 API 응답을 함께 확인해야 합니다. 현재 워크플로의 성공 메시지는 재배포 명령의 완료를 뜻하며, HTTP 응답이나 서비스 정상 동작을 자동 검증하지 않습니다.
-
-**향후 개선:** 배포 전 테스트 실행과 재배포 후 HTTP 확인 단계를 추가하는 것이 필요합니다. 현재 구현된 자동화와 구분해 개선 과제로 남깁니다.
-
-## 참고 자료
-
-- [Open Closet Notion 프로젝트 정리](https://app.notion.com/p/2eed6df1c80d81af8663c920713b386e)
-- [README 구성 참고 · All-Life](https://github.com/ByeolNabi/All-Life)
+<p align="center">
+  <img src="https://img.shields.io/badge/Springdoc%20OpenAPI-3F7526?style=for-the-badge&amp;logo=openapiinitiative&amp;logoColor=white" alt="Springdoc OpenAPI" />
+  <img src="https://img.shields.io/badge/Swagger%20UI-43671B?style=for-the-badge&amp;logo=swagger&amp;logoColor=white" alt="Swagger UI" />
+</p>
